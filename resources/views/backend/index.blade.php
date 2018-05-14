@@ -1,4 +1,7 @@
 
+@extends('layouts.backend')
+
+@section('content')
 <h2 class="sub-header">Booking calendar</h2>
 
 <?php for ($i = 1; $i <= 3; $i++): ?>
@@ -36,7 +39,7 @@
                                     <td>3</td>
                                     <td>12/02/2012</td>
                                     <td>12/03/2015</td>
-                                    <td><a target="_blank" href="./?view=person">John</a></td>
+                                    <td><a target="_blank" href="{{ route('person') }}">John</a></td>
                                     <td><a href="#" class="btn btn-primary btn-xs">Confirm</a></td>
                                     <td><a href=""><span class="glyphicon glyphicon-remove"></span></a></td>
                                 </tr>
@@ -53,3 +56,6 @@
     <?php endfor; ?>
 
 <?php endfor; ?>
+@endsection
+
+

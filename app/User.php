@@ -1,5 +1,6 @@
 <?php
 
+
 namespace App;
 
 use Illuminate\Notifications\Notifiable;
@@ -15,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'surname'
     ];
 
     /**
@@ -27,3 +28,4 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 }
+

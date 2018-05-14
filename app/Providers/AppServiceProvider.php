@@ -23,6 +23,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind(\App\Booking\Interfaces\FrontendRepositoryInterface::class,function()
+        {
+            return new \App\Booking\Repositories\FrontendRepository;
+        });
     }
 }
+

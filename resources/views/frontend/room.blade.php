@@ -1,6 +1,9 @@
 
+@extends('layouts.frontend')
+
+@section('content')
 <div class="container places">
-    <h1 class="text-center">Room in <a href="./?view=object">X</a> object</h1>
+    <h1 class="text-center">Room in <a href="{{ route('object') }}">X</a> object</h1>
 
     <?php for ($i = 1; $i <= 2; $i++): ?>
 
@@ -54,7 +57,7 @@
                         <label for="checkout">Check out</label>
                         <input required name="checkout" type="text" class="form-control datepicker" id="checkout" placeholder="">
                     </div>
-                    <button type="submit" class="btn btn-primary">Book</button> 
+                    <button type="submit" class="btn btn-primary">Book</button>
                     <p class="text-danger">There are no vacancies</p>
                 </form>
             </div><br>
@@ -67,5 +70,8 @@
     </section>
 
 </div>
+@endsection
+
+
 
 

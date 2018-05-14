@@ -1,4 +1,7 @@
 
+@extends('layouts.frontend')
+
+@section('content')
 <div class="container-fluid places">
 
     <h1 class="text-center">LoremIpsum object  <small>City name</small></h1>
@@ -38,7 +41,7 @@
 
             <ul class="list-inline">
                 <?php for ($i = 1; $i <= 10; $i++): ?>
-                    <li><a href="./?view=person"><img title="John Doe" class="media-object img-responsive" width="50" height="50" src="http://lorempixel.com/50/50/people/?x=<?= mt_rand(1, 9999999) ?>" alt="..."> </a></li>
+                    <li><a href="{{ route('person') }}"><img title="John Doe" class="media-object img-responsive" width="50" height="50" src="http://lorempixel.com/50/50/people/?x=<?= mt_rand(1, 9999999) ?>" alt="..."> </a></li>
 
                 <?php endfor; ?>
             </ul>
@@ -67,7 +70,7 @@
                             <div class="caption">
                                 <h3>Lorem ipsum</h3>
                                 <p>Lorem impsum dolor sit amet. Lorem impsum dolor sit amet.</p>
-                                <p><a href="./?view=room" class="btn btn-primary" role="button">Details</a><a href="./?view=room#reservation" class="btn btn-success pull-right" role="button">Reservation</a></p>
+                                <p><a href="{{ route('room') }}" class="btn btn-primary" role="button">Details</a><a href="{{ route('room') }}#reservation" class="btn btn-success pull-right" role="button">Reservation</a></p>
                             </div>
                         </div>
                     </div>
@@ -86,7 +89,7 @@
         <?php for ($j = 1; $j <= 4; $j++): ?>
             <div class="media">
                 <div class="media-left media-top">
-                    <a title="John Doe" href="./?view=person">
+                    <a title="John Doe" href="{{ route('person') }}">
                         <img class="media-object" width="50" height="50" src="http://lorempixel.com/50/50/people/?x=<?= mt_rand(1, 9999999) ?>" alt="...">
                     </a>
                 </div>
@@ -153,7 +156,7 @@
                 <p><b> John Doe</b>
                     <i>2016-05-10&nbsp;&nbsp;01:02:33</i>
                 </p>
-                <p>Fugiat similique voluptatum neque tempora iste. Ut sapiente aut autem autem dolores labore tenetur. Voluptatem qui cum earum. Consectetur at ipsam esse nemo est fuga. </p> <a href="./?view=article">More</a>
+                <p>Fugiat similique voluptatum neque tempora iste. Ut sapiente aut autem autem dolores labore tenetur. Voluptatem qui cum earum. Consectetur at ipsam esse nemo est fuga. </p> <a href="{{ route('article') }}">More</a>
             </div>
 
         <?php endfor; ?>
@@ -161,3 +164,6 @@
 
     <a href="#" class="btn btn-primary btn-xs top-buffer">Like this object</a>
 </div>
+@endsection
+
+

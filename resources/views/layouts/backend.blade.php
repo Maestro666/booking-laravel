@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pl">
     <head>
@@ -19,7 +20,7 @@
         <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
         <script src="http://getbootstrap.com/assets/js/ie-emulation-modes-warning.js"></script>
 
-        <link rel="stylesheet" href="css/app.css">
+        <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -39,7 +40,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="index.php">Enjoy the trip!</a>
+                    <a class="navbar-brand" href="{{ route('home') }}">Enjoy the trip!</a>
                 </div>
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-right">
@@ -55,7 +56,7 @@
                             </ul>
                         </li>
                         <li><p class="navbar-text">John Doe</p></li>
-                        <li><a href="admin.blade.php?view=profile">Profile</a></li>
+                        <li><a href="{{ route('profile') }}">Profile</a></li>
                         <li><a href="#">Logout</a></li>
                     </ul>
                 </div>
@@ -66,10 +67,10 @@
             <div class="row">
                 <div class="col-sm-3 col-md-2 sidebar">
                     <ul class="nav nav-sidebar">
-                        <li class="active"><a href="admin.blade.php">Booking calendar <span class="sr-only">(current)</span></a></li>
-                        <li><a href="admin.blade.php?view=myobjects">My tourist objects</a></li>
-                        <li><a href="admin.blade.php?view=saveobject">Add a new tourist object</a></li>
-                        <li><a href="admin.blade.php?view=cities">Cities</a></li>
+                        <li class="active"><a href="{{ route('adminHome') }}">Booking calendar <span class="sr-only">(current)</span></a></li>
+                        <li><a href="{{ route('myObjects') }}">My tourist objects</a></li>
+                        <li><a href="{{ route('saveObject') }}">Add a new tourist object</a></li>
+                        <li><a href="{{ route('cities.index') }}">Cities</a></li>
                     </ul>
                 </div>
 
@@ -85,7 +86,7 @@
 
                     </div>-->
 
-                    <?php include 'backend/' . $view . '.blade.php'; ?>
+                    @yield('content')
                 </div>
             </div>
         </div>
@@ -101,7 +102,8 @@
         <script src="http://getbootstrap.com/assets/js/vendor/holder.min.js"></script>
         <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
         <script src="http://getbootstrap.com/assets/js/ie10-viewport-bug-workaround.js"></script>
-        <script src="js/app.js"></script>
-        <script src="js/admin.js"></script>
+        <script src="{{ asset('js/app.js') }}"></script>
+        <script src="{{ asset('js/admin.js') }}"></script>
     </body>
 </html>
+

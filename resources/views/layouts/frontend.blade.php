@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pl">
     <head>
@@ -17,7 +18,7 @@
           <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
           <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
         <![endif]-->
-        <link rel="stylesheet" href="css/app.css">
+        <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     </head>
     <body>
 
@@ -33,16 +34,32 @@
                     <a class="navbar-brand" href="./">Home</a>
                 </div>
                 <div id="navbar" class="navbar-collapse collapse">
+                    @auth
                     <ul class="nav navbar-nav">
                         <li><p class="navbar-text">Logged in as:</p></li>
-                        <li><p class="navbar-text">Robert</p></li>
-                        <li><a href="admin.blade.php">admin</a></li>
-                        <li><a href="#contact">logout</a></li>
+                        <li><p class="navbar-text">{{ Auth::user()->name }}</p></li>
+                        <li><a href="{{ route('adminHome') }}">admin</a></li>
+
+
+                        <li>
+                        <a class="dropdown-item" href="{{ route('logout') }}"
+                                       onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                        Logout
+                        </a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            {{ csrf_field() }}
+                        </form>
+                        </li>
+
                     </ul>
+                    @endauth
+                    @guest
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="#">Sign in</a></li>
-                        <li><a href="#">Sign up</a></li>
+                        <li><a href="{{ route('login') }}">Sign in</a></li>
+                        <li><a href="{{ route('register') }}">Sign up</a></li>
                     </ul>
+                    @endguest
                 </div><!--/.nav-collapse -->
             </div>
         </nav>
@@ -52,7 +69,7 @@
                 <h1>Enjoy the trip!</h1>
                 <p>A platform for tourists and owners of tourist facilities. Find the original place for the holidays!</p>
                 <p>Place your home on the site and let yourself be found by many tourists!</p>
-                <form action="./?view=roomsearch" class="form-inline">
+                <form action="{{ route('roomSearch') }}" class="form-inline">
                     <div class="form-group">
                         <label class="sr-only" for="city">City</label>
                         <input name="city" type="text" class="form-control autocomplete" id="city" placeholder="City">
@@ -77,27 +94,31 @@
                         </select>
                     </div>
                     <button type="submit" class="btn btn-warning">Search</button>
-                    <input type="hidden" name="view" value="roomsearch">
+
+
+
                 </form>
 
             </div>
         </div>
 
-        <?php include 'frontend/' . $view . '.blade.php'; ?>
+        @yield('content')
 
         <div class="container-fluid">
 
             <div class="row mobile-apps">
 
                 <div class="col-md-6 col-xs-12">
-                    <img src="images/mobile-app.png" alt="" class="img-responsive center-block">
+
+                    <img src="{{ asset('images/mobile-app.png') }}" alt="" class="img-responsive center-block">
                 </div>
 
                 <div class="col-md-6 col-xs-12">
                     <h1 class="text-center">Download mobile app.</h1>
-                    <a href="#"><img class="img-responsive center-block" src="images/google.png" alt=""></a><br><br>
-                    <a href="#"><img class="img-responsive center-block" src="images/apple.png" alt=""></a><br><br>
-                    <a href="#"><img class="img-responsive center-block" src="images/windows.png" alt=""></a>
+
+                    <a href="#"><img class="img-responsive center-block" src="{{ asset('images/google.png') }}" alt=""></a><br><br>
+                    <a href="#"><img class="img-responsive center-block" src="{{ asset('images/apple.png') }}" alt=""></a><br><br>
+                    <a href="#"><img class="img-responsive center-block" src="{{ asset('images/windows.png') }}" alt=""></a>
 
                 </div>
 
@@ -118,6 +139,7 @@
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
         <!-- Include all compiled plugins (below), or include individual files as needed -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-        <script src="js/app.js"></script>
+        <script src="{{ asset('js/app.js') }}"></script>
     </body>
 </html>
+

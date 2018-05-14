@@ -1,4 +1,7 @@
 
+@extends('layouts.backend')
+
+@section('content')
 <h1>Cities <small><a class="btn btn-success" href="#" data-type="button"> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>New city </a></small></h1>
 
 <div class="table-responsive">
@@ -27,9 +30,5 @@
 <input class="form-control" type="text" required name="name"><br>
 <button class="btn btn-primary" type="submit">Create</button>
 </form>
-
-
-
-
-
+@endsection
 
