@@ -1,55 +1,204 @@
-var eventDates = {};
-var datesConfirmed = ['12/12/2017', '12/13/2017', '12/14/2017'];
-var datesnotConfirmed = ['12/20/2017', '12/21/2017', '12/22/2017', '12/25/2017'];
+function datesBetween(startDt, endDt) {
+    var between = [];
+    var currentDate = new Date(startDt);
+    var end = new Date(endDt);
+    while (currentDate <= end) {
+        between.push( $.datepicker.formatDate('mm/dd/yy',new Date(currentDate)) );
+        currentDate.setDate(currentDate.getDate() + 1);
+    }
 
-
-for (var i = 0; i < datesConfirmed.length; i++)
-{
-    eventDates[ datesConfirmed[i] ] = 'confirmed';
+    return between;
 }
 
-var tmp = {};
-for (var i = 0; i < datesnotConfirmed.length; i++)
-{
-    tmp[ datesnotConfirmed[i] ] = 'notconfirmed';
-}
+var Ajax = {
+
+    get: function (url, success, data = null, beforeSend = null) {
+
+        $.ajax({
+
+            cache: false,
+            url: base_url + '/' + url,
+            type: "GET",
+            data: data,
+            success: function(response){
+
+                App[success](response);
+
+            },
+            beforeSend: function(){
+
+                if(beforeSend)
+                    App[beforeSend]();
+
+            }
+
+        });
+    },
+
+    set: function (data = {}, url, success = null) {
+
+        $.ajax({
+
+            cache: false,
+            url: base_url + '/' + url,
+            type: "GET",
+            dataType: "json",
+            data: data,
+            success: function(response){
+
+                if(success)
+                    App[success](response);
+
+            }
+
+        });
+    }
 
 
-Object.assign(eventDates, tmp);
+};
 
 
-$(function () {
-    $(".reservation_calendar").datepicker({
-        onSelect: function (data) {
+var App = {
 
-            var a = $(this).attr('id');
+    timestamp: null, 
 
-            $('.hidden_' + a).hide();
-            $('.loader_' + a).show();
+    idsOfNotShownNotifications: [],
 
-            setTimeout(function () {
 
-                $('.loader_' + a).hide();
-                $('.hidden_' + a).show();
+    GetReservationData: function (id, calendar_id, date) {
 
-            }, 1000);
+        App.calendar_id = calendar_id; 
+        Ajax.get('ajaxGetReservationData?fromWebApp=1', 'AfterGetReservationData',{room_id: id, date: date},'BeforeGetReservationData');
 
-        },
-        beforeShowDay: function (date)
+
+    },
+    BeforeGetReservationData: function() {
+
+
+        $('.loader_' + App.calendar_id).hide(); 
+        $('.hidden_' + App.calendar_id).show(); 
+
+
+    },
+    AfterGetReservationData: function(response) {
+
+
+        $('.hidden_' + App.calendar_id + " .reservation_data_room_number").html(response.room_number); 
+
+        $('.hidden_' + App.calendar_id + " .reservation_data_day_in").html(response.day_in); 
+        $('.hidden_' + App.calendar_id + " .reservation_data_day_out").html(response.day_out); 
+        $('.hidden_' + App.calendar_id + " .reservation_data_person").html(response.FullName); 
+        $('.hidden_' + App.calendar_id + " .reservation_data_person").attr('href', response.userLink); 
+        $('.hidden_' + App.calendar_id + " .reservation_data_delete_reservation").attr('href', response.deleteResLink); 
+
+        
+        if (response.status)
         {
-            var tmp = eventDates[ $.datepicker.formatDate('mm/dd/yy', date)];
-//            console.log(tmp);
-            if (tmp)
-            {
-                if (tmp == 'confirmed')
-                    return [true, 'reservationconfirmed'];
-                else
-                    return [true, 'reservationnotconfirmed'];
-            } else
-                return [false, ''];
+            $('.hidden_' + App.calendar_id + " .reservation_data_confirm_reservation").removeAttr('href');
+            $('.hidden_' + App.calendar_id + " .reservation_data_confirm_reservation").attr('disabled', 'disabled');
 
+        } else
+        {
+            $('.hidden_' + App.calendar_id + " .reservation_data_confirm_reservation").attr('href', response.confirmResLink);
         }
 
 
-    });
+    },
+
+    
+    SetReadNotification: function (id) {
+
+        Ajax.set({id: id}, 'ajaxSetReadNotification?fromWebApp=1');
+    },
+
+
+    
+    GetNotShownNotifications: function() {
+
+        
+        Ajax.get("ajaxGetNotShownNotifications?fromWebApp=1&timestamp=" + App.timestamp, 'AfterGetNotShownNotifications');
+
+    },
+
+    
+    AfterGetNotShownNotifications: function(response) {
+
+        var json = JSON.parse(response);
+
+        App.timestamp = json['timestamp'];
+        setTimeout(App.GetNotShownNotifications(), 100);
+
+
+       
+        if (jQuery.isEmptyObject(json['notifications']))
+            return;
+
+
+        $('#app-notifications-count').show();
+        $('#app-notifications-count').removeClass('hidden');
+
+
+       
+        for (var i = 0; i <= json['notifications'].length - 1; i++)
+        {
+            App.idsOfNotShownNotifications.push(json['notifications'][i].id);
+
+            $('#app-notifications-count').html(parseInt($('#app-notifications-count').html()) + 1);
+            $("#app-notifications-list").append('<li class="unread_notification"><a href="' + json['notifications'][i].id + '">' + json['notifications'][i].content + '</a></li>');
+        }
+
+
+        App.SetShownNotifications(App.idsOfNotShownNotifications);
+
+
+    },
+
+
+   
+    SetShownNotifications: function (ids) {
+
+        Ajax.set({idsOfNotShownNotifications: ids}, 'ajaxSetShownNotifications?fromWebApp=1');
+
+    }
+
+
+};
+
+
+
+$(document).on('click', '.dropdown', function (e) {
+    e.stopPropagation();
 });
+
+
+
+$(document).on("click", ".unread_notification", function (event) {
+
+    event.preventDefault();
+
+    $(this).removeClass('unread_notification');
+
+    var ncount = parseInt($('#app-notifications-count').html());
+
+    if (ncount > 0)
+    {
+        $('#app-notifications-count').html(ncount - 1);
+
+        if (ncount == 1)
+            $('#app-notifications-count').hide();
+    }
+
+    var idOfNotification = $(this).children().attr('href');
+    $(this).children().removeAttr('href');
+    App.SetReadNotification(idOfNotification);
+
+});
+
+
+
+$(function () {
+
+    App.GetNotShownNotifications();
+
+});
+

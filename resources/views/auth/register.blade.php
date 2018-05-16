@@ -8,7 +8,7 @@
                 <div class="card-header">Register</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('register') }}">
+                    <form {{ $novalidate  }} method="POST" action="{{ route('register') }}">
                         {{ csrf_field() }}
 
                         <div class="form-group row">
@@ -25,7 +25,7 @@
                             </div>
                         </div>
 
-
+                        
                         <div class="form-group row">
                             <label for="surname" class="col-md-4 col-form-label text-md-right">Surname</label>
 
@@ -76,6 +76,19 @@
                                 <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
                             </div>
                         </div>
+
+                        
+                        <div class="form-group">
+                            <div class="col-md-6 offset-4">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" name="owner" value="1">
+                                        Register as a owner
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
 
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
